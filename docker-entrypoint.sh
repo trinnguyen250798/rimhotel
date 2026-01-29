@@ -3,8 +3,13 @@ set -e
 
 # Create .env file if it doesn't exist
 if [ ! -f ".env" ]; then
-    echo "Creating .env file from .env.example"
-    cp .env.example .env
+    if [ -f ".env.docker" ]; then
+        echo "Creating .env file from .env.docker"
+        cp .env.docker .env
+    else
+        echo "Creating .env file from .env.example"
+        cp .env.example .env
+    fi
 fi
 
 # Generate APP_KEY if it's not set
