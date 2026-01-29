@@ -14,9 +14,8 @@ if [ -z "$APP_KEY" ] && ! grep -q "^APP_KEY=base64:" .env; then
 fi
 
 # Cache configuration
-echo "Caching configuration..."
-php artisan config:clear
-php artisan cache:clear
+echo "Clearing all caches..."
+php artisan optimize:clear
 php artisan config:cache
 
 # Start the main process
