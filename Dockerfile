@@ -52,5 +52,12 @@ RUN chown -R www-data:www-data /var/www/html \
 # EXPOSE 80 
 # Note: We rely on the PORT env var for the actual listening port
 
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Set entrypoint
+ENTRYPOINT ["docker-entrypoint.sh"]
+
 # Start Apache
 CMD ["apache2-foreground"]
