@@ -9,6 +9,8 @@ services:
     container_name: rimhotel_app
     restart: unless-stopped
     working_dir: /var/www
+    environment:
+       REDIS_HOST: redis
     volumes:
       - ./:/var/www
     networks:
