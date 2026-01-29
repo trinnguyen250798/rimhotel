@@ -18,6 +18,10 @@ if [ -z "$APP_KEY" ] && ! grep -q "^APP_KEY=base64:" .env; then
     php artisan key:generate
 fi
 
+# Run migrations
+echo "Running migrations..."
+php artisan migrate --force
+
 # Cache configuration
 echo "Clearing all caches..."
 php artisan optimize:clear
