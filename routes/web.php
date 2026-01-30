@@ -96,6 +96,34 @@ Route::get('/_load_migrate_', function () {
 
 });
 
+// Test simple user creation without factory
+Route::get('/test-simple-user', function () {
+    try {
+        $user = \App\Models\User::create([
+            'name' => 'Test User',
+            'email' => 'test_' . time() . '@example.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'phone' => '123456789',
+            'address' => 'Test Address',
+            'role' => 'staff',
+            'status' => true,
+        ]);
+
+        return response()->json([
+            'status' => 'SUCCESS',
+            'message' => 'User created successfully without factory!',
+            'user' => $user
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'FAILED',
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ], 500);
+    }
+});
+
 // Test factory và seeder
 Route::get('/test-factory', function () {
     try {
@@ -116,11 +144,13 @@ Route::get('/test-factory', function () {
             'sample_users' => $allUsers->take(5)
         ], 200);
         
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
         return response()->json([
             'status' => 'FAILED',
             'message' => 'Không thể tạo dữ liệu mẫu',
             'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
             'trace' => $e->getTraceAsString()
         ], 500);
     }

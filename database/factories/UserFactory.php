@@ -33,7 +33,7 @@ class UserFactory extends Factory
             'address' => fake()->address(),
             'avatar' => null,
             'position' => fake()->jobTitle(),
-            'status' => fake()->randomElement(['active', 'inactive']),
+            'status' => fake()->boolean(),
             'role' => fake()->randomElement(['staff', 'admin']),
         ];
     }
