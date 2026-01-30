@@ -21,19 +21,7 @@ Route::get('/_load_migrate_', function () {
         abort(403, 'Invalid key');
     }
 
-    // 3. Kiểm tra DB đã migrate chưa
-    try {
-        if (DB::table('migrations')->count() > 0) {
-            return response()->json([
-                'status' => 'SKIPPED',
-                'message' => 'Already migrated'
-            ]);
-        }
-    } catch (\Throwable $e) {
-        // Chưa có bảng migrations → OK, tiếp tục
-    }
-
-    // 4. Chạy migrate
+    // 3. Chạy migrate (sẽ chỉ chạy các migration chưa được thực hiện)
     try {
         Artisan::call('migrate', [
             '--force' => true
