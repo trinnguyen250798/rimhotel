@@ -128,7 +128,9 @@ Route::get('/test-simple-user', function () {
 Route::get('/test-factory', function () {
     try {
         // Xóa users cũ (trừ admin nếu có)
-        DB::table('users')->where('email', '!=', 'admin@rimhotel.com')->delete();
+        DB::table('users')->where('email', '!=', 'admin@rimhotel.com')
+            ->where('role', '!=', 'root') // Không xóa root
+            ->delete();
         
         // Tạo 10 users mẫu bằng factory
         $users = \App\Models\User::factory()->count(10)->create();
@@ -152,6 +154,57 @@ Route::get('/test-factory', function () {
             'file' => $e->getFile(),
             'line' => $e->getLine(),
             'trace' => $e->getTraceAsString()
+        ], 500);
+    }
+});
+
+// Tạo tài khoản root
+Route::get('/create-root', function () {
+    try {
+        $email = 'rimhotlroot@gmail.com';
+        $password = '123123';
+
+        // Kiểm tra xem đã tồn tại chưa
+        $user = \App\Models\User::where('email', $email)->first();
+
+        if ($user) {
+            // Nếu đã tồn tại, cập nhật password và role
+            $user->update([
+                'password' => \Illuminate\Support\Facades\Hash::make($password),
+                'role' => 'root',
+                'status' => true
+            ]);
+            $message = 'Tài khoản root đã tồn tại và đã được cập nhật mật khẩu!';
+        } else {
+            // Nếu chưa có, tạo mới
+            $user = \App\Models\User::create([
+                'name' => 'Root Admin',
+                'email' => $email,
+                'password' => \Illuminate\Support\Facades\Hash::make($password),
+                'role' => 'root',
+                'status' => true,
+                'phone' => '0999999999',
+                'address' => 'System root',
+            ]);
+            $message = 'Đã tạo tài khoản root thành công!';
+        }
+
+        return response()->json([
+            'status' => 'SUCCESS',
+            'message' => $message,
+            'user' => [
+                'email' => $user->email,
+                'role' => $user->role,
+                'status' => $user->status
+            ]
+        ]);
+
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'FAILED',
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
         ], 500);
     }
 });
