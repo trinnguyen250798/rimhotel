@@ -36,6 +36,11 @@ class Hotel extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function roomTypes()
+    {
+        return $this->hasMany(RoomType::class, 'hotel_id', 'hotel_id');
+    }
+
     protected function casts(): array
     {
         return [
