@@ -60,15 +60,32 @@ Route::get('/_load_migrate_', function () {
         abort(403, 'Invalid key');
     }
 
-    // 3. Chạy migrate (sẽ chỉ chạy các migration chưa được thực hiện)
+    // 3. Clear cache trước khi migrate
     try {
+        $outputs = [];
+        
+        // Clear route cache
+        Artisan::call('route:clear');
+        $outputs['route_clear'] = Artisan::output();
+        
+        // Clear config cache
+        Artisan::call('config:clear');
+        $outputs['config_clear'] = Artisan::output();
+        
+        // Clear application cache
+        Artisan::call('cache:clear');
+        $outputs['cache_clear'] = Artisan::output();
+        
+        // 4. Chạy migrate (sẽ chỉ chạy các migration chưa được thực hiện)
         Artisan::call('migrate', [
             '--force' => true
         ]);
+        $outputs['migrate'] = Artisan::output();
 
         return response()->json([
             'status' => 'SUCCESS',
-            'output' => Artisan::output()
+            'message' => 'Migration và clear cache thành công!',
+            'outputs' => $outputs
         ]);
     } catch (\Throwable $e) {
         return response()->json([
