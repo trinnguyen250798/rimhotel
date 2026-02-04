@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:*', 'https://rimhotel.onrender.com'],
+    'allowed_origins' => ['http://localhost:*', 'https://rimhotel.onrender.com', 'https://rimhotel-admin.vercel.app'],
 
     'allowed_origins_patterns' => [],
 
