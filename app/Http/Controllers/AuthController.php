@@ -50,7 +50,7 @@ class AuthController extends Controller
 
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'message' => 'Credentials do not match our records.',
+                'message' => 'Tài khoản hoặc mật khẩu không đúng.',
             ], 401);
         }
 
