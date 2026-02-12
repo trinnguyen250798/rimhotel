@@ -19,39 +19,7 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 // Public hotel routes (no authentication required)
-Route::get('/hotels', [HotelController::class, 'index']);
-Route::get('/hotels/{id}', [HotelController::class, 'show']);
-Route::get('/hotels/{hotelId}/room-types', [RoomTypeController::class, 'getByHotel']);
 
-// Public room type routes
-Route::get('/room-types', [RoomTypeController::class, 'index']);
-Route::get('/room-types/{id}', [RoomTypeController::class, 'show']);
-Route::get('/room-types/{roomTypeId}/rooms', [RoomController::class, 'getByRoomType']);
-
-// Public room routes
-Route::get('/rooms', [RoomController::class, 'index']);
-Route::get('/rooms/{id}', [RoomController::class, 'show']);
-
-// Public staff management routes
-Route::get('/departments', [DepartmentController::class, 'index']);
-Route::get('/departments/{id}', [DepartmentController::class, 'show']);
-Route::get('/hotels/{hotelId}/departments', [DepartmentController::class, 'getByHotel']);
-
-Route::get('/positions', [PositionController::class, 'index']);
-Route::get('/positions/{id}', [PositionController::class, 'show']);
-
-Route::get('/staff-groups', [StaffGroupController::class, 'index']);
-Route::get('/staff-groups/{id}', [StaffGroupController::class, 'show']);
-Route::get('/hotels/{hotelId}/staff-groups', [StaffGroupController::class, 'getByHotel']);
-
-Route::get('/staff', [StaffManagementController::class, 'index']);
-Route::get('/staff/{id}', [StaffManagementController::class, 'show']);
-Route::get('/hotels/{hotelId}/staff', [StaffManagementController::class, 'getByHotel']);
-Route::get('/departments/{departmentId}/staff', [StaffManagementController::class, 'getByDepartment']);
-
-Route::get('/permissions', [PermissionController::class, 'index']);
-Route::get('/permissions/{id}', [PermissionController::class, 'show']);
-Route::get('/permissions/module/{module}', [PermissionController::class, 'getByModule']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -67,11 +35,30 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
         // Hotel Management (Admin can manage all hotels)
+
+        Route::get('/hotels', [HotelController::class, 'index']);
+        Route::get('/hotels/{id}', [HotelController::class, 'show']);
+        Route::get('/hotels/{hotelId}/room-types', [RoomTypeController::class, 'getByHotel']);
+
+
+
         Route::post('/hotels', [HotelController::class, 'store']);
         Route::put('/hotels/{id}', [HotelController::class, 'update']);
         Route::delete('/hotels/{id}', [HotelController::class, 'destroy']);
 
         // Room Type Management
+
+        // Public room type routes
+        Route::get('/room-types', [RoomTypeController::class, 'index']);
+        Route::get('/room-types/{id}', [RoomTypeController::class, 'show']);
+        Route::get('/room-types/{roomTypeId}/rooms', [RoomController::class, 'getByRoomType']);
+
+        // Public room routes
+        Route::get('/rooms', [RoomController::class, 'index']);
+        Route::get('/rooms/{id}', [RoomController::class, 'show']);
+
+
+
         Route::post('/room-types', [RoomTypeController::class, 'store']);
         Route::put('/room-types/{id}', [RoomTypeController::class, 'update']);
         Route::delete('/room-types/{id}', [RoomTypeController::class, 'destroy']);
@@ -89,6 +76,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/departments/{id}/manager', [DepartmentController::class, 'assignManager']);
 
         // Position Management
+
+        // Public staff management routes
+        Route::get('/departments', [DepartmentController::class, 'index']);
+        Route::get('/departments/{id}', [DepartmentController::class, 'show']);
+        Route::get('/hotels/{hotelId}/departments', [DepartmentController::class, 'getByHotel']);
+
+        Route::get('/positions', [PositionController::class, 'index']);
+        Route::get('/positions/{id}', [PositionController::class, 'show']);
+
         Route::post('/positions', [PositionController::class, 'store']);
         Route::put('/positions/{id}', [PositionController::class, 'update']);
         Route::delete('/positions/{id}', [PositionController::class, 'destroy']);
@@ -98,6 +94,21 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/staff-groups', [StaffGroupController::class, 'store']);
         Route::put('/staff-groups/{id}', [StaffGroupController::class, 'update']);
         Route::delete('/staff-groups/{id}', [StaffGroupController::class, 'destroy']);
+
+
+        Route::get('/staff-groups', [StaffGroupController::class, 'index']);
+        Route::get('/staff-groups/{id}', [StaffGroupController::class, 'show']);
+        Route::get('/hotels/{hotelId}/staff-groups', [StaffGroupController::class, 'getByHotel']);
+
+        Route::get('/staff', [StaffManagementController::class, 'index']);
+        Route::get('/staff/{id}', [StaffManagementController::class, 'show']);
+        Route::get('/hotels/{hotelId}/staff', [StaffManagementController::class, 'getByHotel']);
+        Route::get('/departments/{departmentId}/staff', [StaffManagementController::class, 'getByDepartment']);
+
+        Route::get('/permissions', [PermissionController::class, 'index']);
+        Route::get('/permissions/{id}', [PermissionController::class, 'show']);
+        Route::get('/permissions/module/{module}', [PermissionController::class, 'getByModule']);
+
 
         // Staff Management (New comprehensive staff system)
         Route::post('/staff-management', [StaffManagementController::class, 'store']);
